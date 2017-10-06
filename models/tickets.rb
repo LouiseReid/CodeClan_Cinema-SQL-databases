@@ -43,4 +43,14 @@ class Ticket
     SqlRunner.run(sql, values)
   end
 
+  def self.tickets_bought(customer_id)
+    sql = "SELECT * FROM tickets where customer_id = $1"
+    values = [customer_id]
+    tickets_bought = SqlRunner.run(sql, values)
+    result = tickets_bought.map { |ticket| Ticket.new(ticket)  }
+    return result.count
+  end
+
+
+
 end

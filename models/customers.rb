@@ -1,5 +1,6 @@
 require_relative("../db/sql_runner")
 
+
 class Customer
 
   attr_reader :id
@@ -51,5 +52,11 @@ class Customer
     film_booked = SqlRunner.run(sql, values)
     return film_booked.map { |film| Film.new(film)  }
   end
+
+  def buy_ticket(film)
+    @funds -= film.price
+    update()
+  end
+
 
 end
