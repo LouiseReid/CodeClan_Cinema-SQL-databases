@@ -4,17 +4,18 @@ require_relative("../db/sql_runner")
 class Customer
 
   attr_reader :id
-  attr_accessor :name, :funds
+  attr_accessor :name, :funds, :age
 
   def initialize(options)
     @id = options['id'].to_i
     @name = options['name']
     @funds = options['funds'].to_i
+    @age = options['age'].to_i
   end
 
   def save()
-    sql = "INSERT INTO customers (name, funds) VALUES ($1, $2) RETURNING id;"
-    values = [@name, @funds]
+    sql = "INSERT INTO customers (name, funds, age) VALUES ($1, $2, $3) RETURNING id;"
+    values = [@name, @funds, @age]
     customer = SqlRunner.run(sql, values).first
     @id = customer['id'].to_i
   end
@@ -38,9 +39,9 @@ class Customer
   end
 
   def update()
-    sql = "UPDATE customers SET (name, funds) = ($1, $2)
-      WHERE id = $3;"
-    values = [@name, @funds, @id]
+    sql = "UPDATE customers SET (name, funds, age) = ($1, $2, $3)
+      WHERE id = $4;"
+    values = [@name, @funds, @age, @id]
     SqlRunner.run(sql, values)
   end
 
@@ -58,5 +59,10 @@ class Customer
     update()
   end
 
-
+  def allowed_entry(film)
+    if @age >= film.rating
+      return true
+    end
+    else return "you're too young for this one!"
+  end
 end

@@ -3,12 +3,13 @@ require_relative("../db/sql_runner")
 class Film
 
   attr_reader :id
-  attr_accessor :title, :price
+  attr_accessor :title, :price, :rating
 
   def initialize(options)
     @id = options['id'].to_i
     @title = options['title']
     @price = options['price'].to_i
+    @rating = options['rating'].to_i
   end
 
   def save()
@@ -52,8 +53,17 @@ class Film
     return customers_in_film.map { |customer| Customer.new(customer)  }
   end
 
-  def num_customers_in_film
+
+  def num_customers_in_film()
     customers_in_film.count
   end
+
+
+
+
+
+
+
+
 
 end

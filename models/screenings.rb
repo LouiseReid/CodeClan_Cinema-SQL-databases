@@ -3,18 +3,19 @@ require_relative("../db/sql_runner")
 class Screening
 
   attr_reader :id
-  attr_accessor :time_of_screening, :film_id
+  attr_accessor :time, :film_id, :capacity
 
   def initialize(options)
     @id = options['id'].to_i
-    @time_of_screening = options['time_of_screening']
+    @time = options['time']
     @film_id = options['film_id'].to_i
+    @capacity = options['capacity'].to_i
   end
 
   def save()
-    sql = "INSERT INTO screenings (time_of_screening, film_id) VALUES ($1, $2)
+    sql = "INSERT INTO screenings (time, film_id, capacity) VALUES ($1, $2, $3)
         RETURNING id;"
-    values = [@time_of_screening, @film_id]
+    values = [@time, @film_id, @capacity]
     screening = SqlRunner.run(sql, values).first
     @id = screening['id'].to_i
   end
@@ -38,22 +39,21 @@ class Screening
   end
 
   def update()
-    sql = "UPDATE screenings SET (time_of_screening, film_id) = ($1, $2)
-          WHERE id = $3;"
-    values = [@time_of_screening, @film_id, @id]
+    sql = "UPDATE screenings SET (time, film_id, capacity) = ($1, $2, $3)
+          WHERE id = $4;"
+    values = [@time, @film_id, @capacity, @id]
     SqlRunner.run(sql, values)
   end
 
-# this one doesn't work, expecting to return 21.00 as it is the start time
-# with the most films. Error message - undefined method 'mode'
-  def self.most_films_at_time()
-    sql = "SELECT screenings.*, films.title FROM screenings
-          INNER JOIN films
-          ON films.id = screenings.film_id;"
-    values = []
-    most_films_at_time = SqlRunner.run(sql, values)
-    return most_films_at_time.mode
+  def capacity_check(film)
+    if film.num_customers_in_film < @capacity
+      return "tickets available"
+    else
+      return "this showing is full"
+    end
   end
+
+
 
 
 
