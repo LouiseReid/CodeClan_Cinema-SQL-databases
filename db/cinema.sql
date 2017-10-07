@@ -13,7 +13,7 @@ CREATE TABLE customers(
 CREATE TABLE films(
   id SERIAL4 PRIMARY KEY,
   title VARCHAR(255),
-  price INT,
+  price INT CHECK (price > 0),
   rating INT
 );
 
@@ -21,7 +21,7 @@ CREATE TABLE screenings(
   id SERIAL4 PRIMARY KEY,
   time VARCHAR(255),
   film_id INT4 REFERENCES films(id) ON DELETE CASCADE,
-  capacity INT
+  capacity INT CHECK (capacity > 0)
 );
 
 CREATE TABLE tickets(
