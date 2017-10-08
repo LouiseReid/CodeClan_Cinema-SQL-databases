@@ -45,6 +45,19 @@ class Screening
     SqlRunner.run(sql, values)
   end
 
+# not convinced this is giving me the answer i want as you'd have to
+# check each screening and film to see the one with the most tickets sold?
+# The query does show it at a glance in table format though...?
+  def tickets_per_screening(film)
+    sql = "SELECT screening_id, COUNT(*) AS QTY FROM tickets
+    WHERE film_id = tickets.film_id
+    GROUP BY screening_id;"
+    values = []
+    most_popular_screening = SqlRunner.run(sql, values)
+    return most_popular_screening.first
+  end
+
+
   def capacity_check(film)
     if film.num_customers_in_film < @capacity
       return "tickets available"

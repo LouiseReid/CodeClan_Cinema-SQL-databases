@@ -58,6 +58,8 @@ class Film
     customers_in_film.count
   end
 
+  
+
 
 
 
