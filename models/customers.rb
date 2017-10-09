@@ -62,7 +62,7 @@ class Customer
   def allowed_entry(film)
     if @age >= film.rating
       return true
-    end
     else return "you're too young for this one!"
+    end
   end
 end

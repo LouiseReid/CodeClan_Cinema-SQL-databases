@@ -58,7 +58,15 @@ class Film
     customers_in_film.count
   end
 
-  
+  def most_popular_screening()
+    sql = "SELECT screening_id, COUNT(*) AS QTY FROM tickets
+    WHERE film_id = tickets.film_id AND film_id = $1
+    GROUP BY screening_id;"
+    values = [@id]
+    most_popular_screening = SqlRunner.run(sql, values)
+    return most_popular_screening.first
+  end
+
 
 
 
