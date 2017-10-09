@@ -46,10 +46,11 @@ class Screening
   end
 
 
+
 # not quite corrrect as is taking in tickets sold per film rather
 # than per screening
   def capacity_check(film)
-    if film.most_popular_screening < @capacity
+    if film.num_customers_in_film < @capacity
       return "tickets available"
     else
       return "this showing is full"
